@@ -5,7 +5,7 @@ pipeline {
 	         steps {
                 // step1 
                 echo 'compiling..'
-		            git url: 'https://github.com/lerndevops/samplejavaapp'
+		            git url: 'https://github.com/Ganesh01Devops/samplejavaapp'
 		            sh script: '/opt/maven/bin/mvn compile'
            }
         }
@@ -60,14 +60,14 @@ pipeline {
 	         steps {
               withDockerRegistry(credentialsId: 'DOCKER_HUB_LOGIN', url: 'https://index.docker.io/v1/') {
                     sh script: 'cd  $WORKSPACE'
-                    sh script: 'docker build --file Dockerfile --tag docker.io/lerndevops/samplejavaapp:$BUILD_NUMBER .'
-                    sh script: 'docker push docker.io/lerndevops/samplejavaapp:$BUILD_NUMBER'
+                    sh script: 'docker build --file Dockerfile --tag docker.io/ganesh01devops/samplejavaapp:$BUILD_NUMBER .'
+                    sh script: 'docker push docker.io/ganesh01devops/samplejavaapp:$BUILD_NUMBER'
               }	
            }		
         }
         stage('deploy-QA') {
 	         steps {
-                    sh script: 'sudo ansible-playbook --inventory /tmp/myinv $WORKSPACE/deploy/deploy-kube.yml --extra-vars "env=qa build=$BUILD_NUMBER"'
+                    sh script: 'ansible-playbook --inventory /tmp/inv $WORKSPACE/deploy/deploy-kube.yml --extra-vars "env=qa build=$BUILD_NUMBER"'
            }		
         }
     }
